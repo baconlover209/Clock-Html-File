@@ -501,7 +501,7 @@
                 <div class="setting-item">
                     <input class="checkbox" type="checkbox" id="toggleSep" checked>
                     <span class="checkbox-custom"></span>
-                    <label for="toggleDate">Toggle Comma</label>
+                    <label for="toggleSep">Toggle Comma</label>
                 </div>
                 <div style="width: 100%; display: flex; flex-direction: row;">
                     <div>
@@ -764,20 +764,6 @@
                 const fontLinks = data.items.map(font => `<link href="https://fonts.googleapis.com/css?family=${font.family.replace(/ /g, '+')}" rel="stylesheet">`).join('');
                 document.head.innerHTML += fontLinks;
 
-                // Apply the initial font
-                const selectedThemeIndex = localStorage.getItem('selectedTheme');
-                if (selectedThemeIndex) {
-                    const themes = JSON.parse(localStorage.getItem('themes')) || [];
-                    const selectedTheme = themes[selectedThemeIndex];
-                    const link = document.createElement('link');
-                    link.href = `https://fonts.googleapis.com/css?family=${selectedTheme.font.replace(/ /g, '+')}`;
-                    link.rel = 'stylesheet';
-                    document.head.appendChild(link);
-                    link.onload = () => {
-                        fontSelect.value = selectedTheme.font;
-                        updateStyles();
-                    }
-                } else {
                     const link = document.createElement('link');
                     link.href = `https://fonts.googleapis.com/css?family=Major+Mono+Display`;
                     link.rel = 'stylesheet';
@@ -786,7 +772,6 @@
                         fontSelect.value = 'Source Code Pro';
                         updateStyles();
                     }
-                }
             });
 
 
@@ -1843,6 +1828,7 @@
             let elementsLarge = document.querySelectorAll('.screen-text-large');
             let elementsMedium = document.querySelectorAll('.screen-text-medium');
             // Applying font, bold, character spacing, text size multiplier, and opacity
+            console.log(settings.selectedFont);
             element.style.fontFamily = settings.selectedFont;
             element.style.fontWeight = settings.textBold ? 'bold' : 'normal';
             element.style.letterSpacing = settings.characterSpacing + 'px';
@@ -1874,6 +1860,7 @@
             const shadowColorRGB = hexToRGB(settings.shadowColor);
             const rgbaShadowColor = `rgba(${shadowColorRGB.r}, ${shadowColorRGB.g}, ${shadowColorRGB.b}, ${settings.shadowOpacity})`;
             element.style.textShadow = `${offsetX}px ${offsetY}px ${settings.shadowRadius}px ${rgbaShadowColor}`;
+            updateStyles();
         }
 
         function saveSettingsToList(name) {
